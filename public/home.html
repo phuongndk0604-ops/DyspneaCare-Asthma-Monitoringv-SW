@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asthma Cybernetics</title>
+
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+
+  <div class="logo">
+    Asthma Cybernetics
+  </div>
+
+  <div class="nav-menu">
+
+    <button id="manageAccountBtn" class="nav-btn">
+      ⚙️ Manage Accounts
+    </button>
+
+    <button id="openAdviceModal" class="nav-btn">
+      🩺 Doctor Advice
+    </button>
+
+    <button id="logoutBtn" class="logout-btn">
+      🚪 Logout
+    </button>
+
+  </div>
+
+</nav>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <h2>Health Metrics</h2>
+
+    <div class="card sensor-card" data-sensor="heartRate">
+      <span>Heart Rate</span>
+      <div class="value" id="heartRate">--</div>
+    </div>
+
+    <div class="card sensor-card" data-sensor="spo2">
+      <span>SpO₂</span>
+      <div class="value" id="spo2">--</div>
+    </div>
+
+    <div class="card sensor-card" data-sensor="bodyTemp">
+      <span>Body Temperature</span>
+      <div class="value" id="bodyTemp">--</div>
+    </div>
+
+    <h2>Environment</h2>
+
+    <div class="card sensor-card" data-sensor="nox">
+      <span>NOx</span>
+      <div class="value" id="nox">--</div>
+    </div>
+
+    <div class="card sensor-card" data-sensor="pm25">
+      <span>PM2.5</span>
+      <div class="value" id="pm25">--</div>
+    </div>
+
+    <div class="card sensor-card" data-sensor="airTemp">
+      <span>Air Temperature</span>
+      <div class="value" id="airTemp">--</div>
+    </div>
+
+    <div class="card sensor-card" data-sensor="humidity">
+      <span>Humidity</span>
+      <div class="value" id="humidity">--</div>
+    </div>
+
+    <div class="card">
+      <h3>Nearest Medical Facility</h3>
+      <div id="pharmacyInfo">
+        Searching...
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MAP -->
+  <div id="map"></div>
+
+</div>
+
+<!-- CHART MODAL -->
+<div id="chartModal" class="modal">
+  <div class="modal-content">
+
+    <span id="closeModal">&times;</span>
+
+    <h2 id="chartTitle"></h2>
+
+    <div class="chart-container">
+        <canvas id="sensorChart"></canvas>
+    </div>
+
+  </div>
+</div>
+
+<!-- ADVICE MODAL -->
+<div id="adviceModal" class="modal">
+  <div class="modal-content advice-modal">
+
+    <span id="closeAdviceModal">&times;</span>
+
+    <h2>Doctor Advice</h2>
+
+    <div style="position:relative;">
+      <input
+        type="text"
+        id="patientCode"
+        placeholder="Enter patient code"
+        autocomplete="off"
+      >
+      <ul id="patientSuggestions" style="
+        display:none;
+        position:fixed;
+        background:#fff;
+        border:1px solid #ccc;
+        border-radius:8px;
+        list-style:none;
+        padding:0;
+        max-height:200px;
+        overflow-y:auto;
+        z-index:10000;
+        box-shadow:0 4px 12px rgba(0,0,0,0.15);
+      "></ul>
+    </div>
+
+    <button id="loadAdviceBtn">
+      View Advice
+    </button>
+
+    <div class="section-box">
+      <h3>Doctor's Advice</h3>
+      <div id="doctorAdvice">
+        No data available
+      </div>
+    </div>
+
+    <div class="section-box ai-section">
+      <h3>AI Analysis</h3>
+      <div class="ai-controls">
+        <label for="analysisDate">Select date:</label>
+        <input type="date" id="analysisDate">
+        <div class="ai-buttons">
+          <button id="analyzeDateBtn" class="ai-btn">Analyze Selected Date</button>
+          <button id="analyzeYesterdayBtn" class="ai-btn ai-btn-secondary">Analyze Yesterday</button>
+        </div>
+        <div id="analysisStatus" class="analysis-status"></div>
+      </div>
+      <div id="analysisList">
+        <p class="placeholder-text">No analysis available. Select a date and generate one below.</p>
+      </div>
+      <div id="analysisPagination" class="analysis-pagination" style="display:none">
+        <button id="prevPageBtn" class="page-btn" disabled>← Previous</button>
+        <span id="pageIndicator" class="page-indicator">Page 1 of 1</span>
+        <button id="nextPageBtn" class="page-btn">Next →</button>
+      </div>
+    </div>
+
+    <div id="doctorEditor">
+      <textarea
+        id="adviceText"
+        rows="8"
+        placeholder="Enter advice..."
+      ></textarea>
+
+      <button id="saveAdviceBtn">
+        Save Advice
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div id="profileModal" class="modal">
+  <div class="modal-content">
+
+    <span id="closeProfileModal">&times;</span>
+
+    <h2>Account Information</h2>
+
+    <p><b>Full Name:</b> <span id="profileName"></span></p>
+    <p><b>Username:</b> <span id="profileUsername"></span></p>
+    <p><b>Role:</b> <span id="profileRole"></span></p>
+
+  </div>
+</div>
+
+<!-- ADD PATIENT -->
+<div id="patientModal" class="modal">
+  <div class="modal-content">
+
+    <span id="closePatientModal">&times;</span>
+
+    <h2>Add Patient</h2>
+
+    <input type="text" placeholder="Patient Code">
+    <input type="text" placeholder="Username">
+    <input type="password" placeholder="Password">
+    <input type="text" placeholder="First Name">
+    <input type="text" placeholder="Last Name">
+
+    <button>Save Patient</button>
+
+  </div>
+</div>
+
+<!-- ACCOUNT MANAGER -->
+<div id="accountModal" class="modal">
+  <div class="modal-content account-modal">
+
+    <span id="closeAccountModal">&times;</span>
+    <h2>⚙️ Account Management</h2>
+
+    <div class="account-search-bar">
+      <input type="text" id="userSearchInput" placeholder="🔍 Search by name, username, patient code...">
+    </div>
+
+    <div class="user-table-wrap">
+      <table id="userTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Role</th>
+            <th>Username</th>
+            <th>Patient Code</th>
+            <th>Full Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- EDIT USER MODAL -->
+<div id="editUserModal" class="modal">
+  <div class="modal-content edit-user-modal">
+
+    <span id="closeEditUserModal">&times;</span>
+    <h2>✏️ Edit Account</h2>
+
+    <input type="hidden" id="editUserId">
+
+    <div class="edit-form-grid">
+
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" id="editFirstName" placeholder="First Name">
+      </div>
+
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" id="editLastName" placeholder="Last Name">
+      </div>
+
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="editUsername" placeholder="Username">
+      </div>
+
+      <div class="form-group">
+        <label>Role</label>
+        <select id="editRole">
+          <option value="patient">Patient</option>
+          <option value="doctor">Doctor</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>New Password</label>
+        <input type="password" id="editPassword" placeholder="New password...">
+      </div>
+
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="editConfirmPassword" placeholder="Re-enter password...">
+      </div>
+
+    </div>
+
+    <div class="edit-actions">
+      <button id="saveEditUserBtn" class="btn-save">💾 Save Changes</button>
+      <button id="cancelEditUserBtn" class="btn-cancel">Cancel</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

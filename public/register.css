@@ -1,0 +1,157 @@
+@font-face {
+  font-family: 'Inter';
+  src: url('font/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: #7EC5FF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  background-color: white;
+  border-radius: 20px;
+  padding: 30px 40px;
+  width: 100%;
+  max-width: 540px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+form {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.name-group {
+  display: flex;
+  gap: 10px;
+}
+
+.input-box {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+label {
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+input {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ddd;
+  font-size: 15px;
+}
+
+.btn {
+  width: 45%;
+  padding: 12px;
+  background-color: #0BD400;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 10px auto;
+  transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #12910b;
+}
+
+.login-link {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  color: #0009B1;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+/* ========================= */
+/* 📱 Responsive Section */
+/* ========================= */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .container {
+    padding: 25px 30px;
+    max-width: 90%;
+  }
+
+  .name-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn {
+    font-size: 15px;
+  }
+
+  input {
+    font-size: 14px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  label {
+    font-size: 14px;
+  }
+
+  input {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .btn {
+    padding: 10px;
+    font-size: 15px;
+  }
+
+  .login-link {
+    font-size: 13px;
+  }
+}
